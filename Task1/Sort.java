@@ -10,8 +10,7 @@ public class Sort {
       if (arr1[i] < arr2[j]) {
         rez[i + j] = arr1[i];
         ++i;
-      }
-      else {
+      } else {
         rez[i + j] = arr2[j];
         ++j;
       }  
@@ -19,8 +18,7 @@ public class Sort {
     if (i == l1) {
       for (; j < l2; ++j)
         rez[i + j] = arr2[j];
-    }
-    else {
+    } else {
       for (; i < l1; ++i)
         rez[i + j] = arr1[i];
     }
@@ -42,8 +40,7 @@ public class Sort {
       arr1 = mergesort(arr1);
       arr2 = mergesort(arr2);
       return merge(arr1, arr2);
-    }
-    else {
+    } else {
       return arr;
     }
   }
