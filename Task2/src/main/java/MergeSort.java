@@ -28,7 +28,7 @@ public class MergeSort<T> {
     }
 
 
-    public List<T> mergesort(List<T> arr, Comparator<T> comparator) {
+    public<T> List<T> mergesort(List<T> arr, Comparator<T> comparator) {
         int l = arr.size();
         if (l > 1) {
             List<T> arr1 = arr.subList(0, l / 2);
