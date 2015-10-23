@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class MergeSort<T> {
+public class MergeSort<T> implements Sort<T>{
     private static <T> List<T> merge(List<T> arr1, List<T> arr2, Comparator<T> comparator) {
         int l1 = arr1.size();
         int l2 = arr2.size();
@@ -28,13 +28,13 @@ public class MergeSort<T> {
     }
 
 
-    public<T> List<T> mergesort(List<T> arr, Comparator<T> comparator) {
+    public List<T> sort (List<T> arr, Comparator<T> comparator) {
         int l = arr.size();
         if (l > 1) {
             List<T> arr1 = arr.subList(0, l / 2);
             List<T> arr2 = arr.subList(l / 2, (2 * l + 1) / 2);
-            arr1 = mergesort(arr1, comparator);
-            arr2 = mergesort(arr2, comparator);
+            arr1 = sort(arr1, comparator);
+            arr2 = sort(arr2, comparator);
             return merge(arr1, arr2, comparator);
         } else {
             return arr;
