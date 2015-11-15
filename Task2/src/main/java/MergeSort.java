@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class MergeSort<T> implements Sort<T>{
+public class MergeSort<T> implements Sort<T> {
     private static <T> List<T> merge(List<T> arr1, List<T> arr2, Comparator<T> comparator) {
         int l1 = arr1.size();
         int l2 = arr2.size();
@@ -28,19 +28,18 @@ public class MergeSort<T> implements Sort<T>{
         return rez;
     }
 
-    public List<T> sort (Collection<T> arr, Comparator<T> comparator)
-    {
+    public List<T> sort(Collection<T> arr, Comparator<T> comparator) {
         List<T> arrAsList = new ArrayList<T>(arr);
-        return sortRecursion(arrAsList,comparator);
+        return sortRecursion(arrAsList, comparator);
     }
 
-    private List<T> sortRecursion (List<T> arr, Comparator<T> comparator) {
+    private List<T> sortRecursion(List<T> arr, Comparator<T> comparator) {
         int l = arr.size();
         if (l > 1) {
             List<T> arr1 = arr.subList(0, l / 2);
             List<T> arr2 = arr.subList(l / 2, (2 * l + 1) / 2);
-            arr1 = sort(arr1, comparator);
-            arr2 = sort(arr2, comparator);
+            arr1 = sortRecursion(arr1, comparator);
+            arr2 = sortRecursion(arr2, comparator);
             return merge(arr1, arr2, comparator);
         } else {
             return arr;
