@@ -1,3 +1,3 @@
-public abstract class FromStringCreator {
-    public abstract Object factoryMethod(String s);
+public interface FromStringCreator<T> {
+    T create(String s);
 }

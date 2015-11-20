@@ -1,5 +1,5 @@
-public class DoubleFromStringCreator extends FromStringCreator {
-    public Object factoryMethod(String s) {
+public class DoubleFromStringCreator implements FromStringCreator<Double> {
+    public Double create(String s) {
         return new Double(s);
     }
 }

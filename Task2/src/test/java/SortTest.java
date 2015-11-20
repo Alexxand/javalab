@@ -15,18 +15,7 @@ import java.util.ArrayList;
 @RunWith(Parameterized.class)
 public class SortTest<T> {
 
-    private Sort<T> sort;
-    private Comparator<T> comparator;
-    private List<T> input;
-
-    public SortTest(Sort<T> sort, Comparator<T> comparator, List<T> input) {
-        this.sort = sort;
-        this.input = input;
-        this.comparator = comparator;
-    }
-
-    private static final Sort<Double> SORT_DOUBLE = new MergeSort<>();
-    private static final Sort<PersonBean> SORT_PERSON_BEAN = new MergeSort<>();
+    private static final Sort SORT = new MergeSort();
 
     private static final Comparator<Double> DOUBLE_ASCENDING_COMPARATOR = Double::compareTo;
     private static final Comparator<Double> DOUBLE_DESCENDING_COMPARATOR = (o1, o2) -> -o1.compareTo(o2);
@@ -39,29 +28,33 @@ public class SortTest<T> {
     };
     private static final Comparator<PersonBean> PERSON_BEAN_AGE_COMPARATOR = (o1, o2) -> Integer.compare(o1.getAge(), o2.getAge());
 
-    private static <E> List<E> ListFromStringArr(String[] stringArr, FromStringCreator creator) {
-        try {
+    private Sort sort;
+    private Comparator<T> comparator;
+    private List<T> input;
+
+    public SortTest(Sort sort, Comparator<T> comparator, List<T> input) {
+        this.sort = sort;
+        this.input = input;
+        this.comparator = comparator;
+    }
+
+    private static <E> List<E> listFromStringArr(String[] stringArr, FromStringCreator<E> creator) {
             List<E> result = new ArrayList<>();
             for (String s : stringArr) {
                 if (!s.trim().isEmpty()) {
-                    result.add((E) creator.factoryMethod(s));
+                    result.add(creator.create(s));
                 }
             }
             return result;
-        } catch (SecurityException e) {
-            System.out.println(e.toString());
-            System.exit(0);
-            return null;
-        }
     }
 
-    private static <E> List<Object[]> GetData(Sort<E> sort, Comparator<E> comparator, FromStringCreator creator, String fileName) {
+    private static <E> List<Object[]> getData(Sort sort, Comparator<E> comparator, FromStringCreator creator, String fileName) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)))) {
             List<Object[]> result = new ArrayList<>();
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] stringArr = line.split(", ");
-                Object[] listElem = new Object[]{sort, comparator, ListFromStringArr(stringArr, creator)};
+                Object[] listElem = new Object[]{sort, comparator, listFromStringArr(stringArr, creator)};
                 result.add(listElem);
             }
             return result;
@@ -73,10 +66,10 @@ public class SortTest<T> {
     @Parameterized.Parameters
     public static Collection<Object[]> testData() {
         List<Object[]> testData = new ArrayList<>();
-        testData.addAll(GetData(SORT_DOUBLE, DOUBLE_ASCENDING_COMPARATOR, new DoubleFromStringCreator(), "doubletest.txt"));
-        testData.addAll(GetData(SORT_DOUBLE, DOUBLE_DESCENDING_COMPARATOR, new DoubleFromStringCreator(), "doubletest.txt"));
-        testData.addAll(GetData(SORT_PERSON_BEAN, PERSON_BEAN_NAME_SURNAME_COMPARATOR, new PersonBeanFromStringCreator(), "personbeantest.txt"));
-        testData.addAll(GetData(SORT_PERSON_BEAN, PERSON_BEAN_AGE_COMPARATOR, new PersonBeanFromStringCreator(), "personbeantest.txt"));
+        testData.addAll(getData(SORT, DOUBLE_ASCENDING_COMPARATOR, new DoubleFromStringCreator(), "doubletest.txt"));
+        testData.addAll(getData(SORT, DOUBLE_DESCENDING_COMPARATOR, new DoubleFromStringCreator(), "doubletest.txt"));
+        testData.addAll(getData(SORT, PERSON_BEAN_NAME_SURNAME_COMPARATOR, new PersonBeanFromStringCreator(), "personbeantest.txt"));
+        testData.addAll(getData(SORT, PERSON_BEAN_AGE_COMPARATOR, new PersonBeanFromStringCreator(), "personbeantest.txt"));
         return testData;
     }
 
