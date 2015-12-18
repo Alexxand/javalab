@@ -62,7 +62,9 @@ interface Expression {
         public Quot(Expression a,Expression b){
             super(a,b);
         }
-        public double solve(double x){
+        public double solve (double x) throws ArithmeticException {
+            if (b.solve(x) == 0)
+                throw new ArithmeticException("Divide by zero");
             return a.solve(x)/b.solve(x);
         }
     }
