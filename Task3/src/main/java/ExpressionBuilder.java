@@ -21,9 +21,8 @@ public class ExpressionBuilder {
 
     private Expression build_S0() throws UnexpectedSymbolException{
         boolean isInBrackets = false;
-        if (expression_s.charAt(offset) == '(') {
+        if (offset > 0 && expression_s.charAt(offset - 1) == '(') {
             isInBrackets = true;
-            offset++;
         }
         Expression a = build_S1();
         while (offset < expression_s.length()){
@@ -95,7 +94,9 @@ public class ExpressionBuilder {
     private Expression build_S2() throws UnexpectedSymbolException{
         switch(expression_s.charAt(offset)){
             case '(':
-                Expression expr = build_S0();
+                offset++;
+                Expression expr =build_S0();
+                offset++;
                 return expr;
             case 'x':
                 offset++;
