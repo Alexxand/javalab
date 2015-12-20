@@ -2,11 +2,11 @@
  * Created by Alexandr on 05.12.15.
  */
 public class ExpressionBuilder {
-    private String expression_s;
+    private String expressionString;
     private int offset = 0;
 
     public ExpressionBuilder(String expression){
-        expression_s = expression;
+        expressionString = expression;
     }
 
 
@@ -15,37 +15,37 @@ public class ExpressionBuilder {
       S2: num | var | (S0) */
 
     public Expression build() throws UnexpectedSymbolException{
-        expression_s = removeAllSpaces(expression_s);
-        return build_S0();
+        expressionString = removeAllSpaces(expressionString);
+        return buildS0();
     }
 
-    private Expression build_S0() throws UnexpectedSymbolException{
+    private Expression buildS0() throws UnexpectedSymbolException{
         boolean isInBrackets = false;
-        if (offset > 0 && expression_s.charAt(offset - 1) == '(') {
+        if (offset > 0 && expressionString.charAt(offset - 1) == '(') {
             isInBrackets = true;
         }
-        Expression a = build_S1();
-        while (offset < expression_s.length()){
-            if (expression_s.charAt(offset) == ')'){
+        Expression a = buildS1();
+        while (offset < expressionString.length()){
+            if (expressionString.charAt(offset) == ')'){
                 if (!isInBrackets)
                     throw new UnexpectedSymbolException(offset + 1);
                 else
                     return a;
             }
 
-            switch (expression_s.charAt(offset)) {
+            switch (expressionString.charAt(offset)) {
                 case '+':
                     offset++;
-                    if (offset == expression_s.length())
+                    if (offset == expressionString.length())
                         throw new UnexpectedSymbolException(offset + 1);
-                    Expression b = build_S1();
+                    Expression b = buildS1();
                     a = new Expression.Sum(a,b);
                     break;
                 case '-':
                     offset++;
-                    if (offset == expression_s.length())
+                    if (offset == expressionString.length())
                         throw new UnexpectedSymbolException(offset + 1);
-                    b = build_S1();
+                    b = buildS1();
                     a = new Expression.Diff(a,b);
                     break;
                 default:
@@ -58,70 +58,69 @@ public class ExpressionBuilder {
             return a;
     }
 
-    private Expression build_S1() throws UnexpectedSymbolException{
-        Expression a = build_S2();
-        while (offset < expression_s.length()){
-            char ch = expression_s.charAt(offset);
+    private Expression buildS1() throws UnexpectedSymbolException{
+        Expression a = buildS2();
+        while (offset < expressionString.length()){
+            char ch = expressionString.charAt(offset);
             if (ch == '+' || ch == '-' || ch == ')'){
                 return a;
             }
 
 
 
-            switch (expression_s.charAt(offset)) {
+            switch (expressionString.charAt(offset)) {
                 case '*':
                     offset++;
-                    if (offset == expression_s.length())
+                    if (offset == expressionString.length())
                         throw new UnexpectedSymbolException(offset + 1);
-                    Expression b = build_S2();
+                    Expression b = buildS2();
                     a = new Expression.Mult(a,b);
                     break;
                 case '/':
                     offset++;
-                    if (offset == expression_s.length())
+                    if (offset == expressionString.length())
                         throw new UnexpectedSymbolException(offset + 1);
-                    b = build_S2();
+                    b = buildS2();
                     a = new Expression.Quot(a,b);
                     break;
                 default:
-                    //unexpected symbol if not ')'
                     throw new UnexpectedSymbolException(offset + 1);
             }
         }
         return a;
     }
 
-    private Expression build_S2() throws UnexpectedSymbolException{
-        switch(expression_s.charAt(offset)){
+    private Expression buildS2() throws UnexpectedSymbolException{
+        switch(expressionString.charAt(offset)){
             case '(':
                 offset++;
-                Expression expr =build_S0();
+                Expression expr = buildS0();
                 offset++;
                 return expr;
             case 'x':
                 offset++;
                 return new Expression.Var();
             default:
-                int end_of_number = findEndOfNumber(expression_s,offset);
-                if(end_of_number == offset)
+                int endOfNumber = findEndOfNumber(expressionString,offset);
+                if(endOfNumber == offset)
                     throw new UnexpectedSymbolException(offset + 1);
-                int old_offset = offset;
-                offset = end_of_number;
-                return new Expression.Num(new Double(expression_s.substring(old_offset,end_of_number)));
+                int oldOffset = offset;
+                offset = endOfNumber;
+                return new Expression.Num(new Double(expressionString.substring(oldOffset,endOfNumber)));
         }
     }
 
     private static String removeAllSpaces(String s){
-        char source_char_arr[] = s.toCharArray();
-        char new_char_arr[] = new char[s.length()];
-        int i_new = 0;
-        for (int i_source = 0;i_source < s.length(); i_source++) {
-            if (source_char_arr[i_source] != ' ') {
-                new_char_arr[i_new] = source_char_arr[i_source];
-                i_new++;
+        char sourceCharArr[] = s.toCharArray();
+        char newCharArr[] = new char[s.length()];
+        int indexNew = 0;
+        for (int indexSource = 0;indexSource < s.length(); indexSource++) {
+            if (sourceCharArr[indexSource] != ' ') {
+                newCharArr[indexNew] = sourceCharArr[indexSource];
+                indexNew++;
             }
         }
-        return new String(new_char_arr,0,i_new);
+        return new String(newCharArr,0,indexNew);
     }
 
     private static int findEndOfNumber(String s,int offset)
