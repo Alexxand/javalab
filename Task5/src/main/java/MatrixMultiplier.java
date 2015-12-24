@@ -1,7 +1,4 @@
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
 
 /**
  * Created by Alexandr on 23.12.15.
@@ -20,7 +17,7 @@ public class MatrixMultiplier {
             multiplier.returnMultiplicationResult().print(resultFileName);
             System.out.println("Execution time for " + threadNumber + " threads: " + executionTime + " ms");
 
-        }catch(IOException | Multiplier.CouldNotMultiplyException | Matrix.IncorrectMatrixFileException e){
+        }catch(IOException | CouldNotMultiplyException | IncorrectMatrixFileException e){
             System.out.println(e.getMessage());
         }
     }

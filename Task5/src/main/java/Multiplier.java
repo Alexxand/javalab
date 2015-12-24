@@ -9,12 +9,7 @@ public class Multiplier {
     private Matrix<Double> first;
     private Matrix<Double> second;
     private Matrix<Double> result;
-
-    public class CouldNotMultiplyException extends Exception{
-        CouldNotMultiplyException(){
-            super("Number of first matrix columns must be equals to number of second matrix rows");
-        }
-    }
+    private Long executionTime;
 
 
     Multiplier(Matrix<Double> first,Matrix<Double> second){
@@ -37,7 +32,7 @@ public class Multiplier {
             int resRowIndex = 0;
             int resColIndex = 0;
             while(!result.isIndexOutOfBound(resRowIndex,resColIndex)){
-                if(result.isCellHaveValue(resRowIndex,resColIndex)){
+                if(!result.isCellHaveValue(resRowIndex,resColIndex)){
                     result.set(resRowIndex,resColIndex,0.);
                     calculateOneCell(resRowIndex,resColIndex);
                 }
@@ -56,31 +51,42 @@ public class Multiplier {
     public Long multiply(int threadNumber) throws CouldNotMultiplyException{
         if (first.getColNumber() != second.getRowNumber())
             throw new CouldNotMultiplyException();
-        final ExecutorService executor = Executors.newFixedThreadPool(threadNumber);
+
+/*        final List<Future<Long>> taskFutures = new ArrayList<>();
+        final ThreadFactory factory = Executors.defaultThreadFactory();
+        for (int i = 0; i < threadNumber; i++) {
+            Callable<Long> task = new OneTask();
+            taskFutures.add(new FutureTask<>(task));
+            factory.newThread(task);
+        }*/
+
         final List<Future<Long>> taskFutures = new ArrayList<>();
+        final ExecutorService executor = Executors.newFixedThreadPool(threadNumber);
         for (int i = 0; i < threadNumber; i++) {
             final Future<Long> future = executor.submit(new OneTask());
             taskFutures.add(future);
         }
+
+
+
+        /*try{
+            executor.awaitTermination(7,TimeUnit.SECONDS);
+        }catch(InterruptedException ignore){
+        }*/
+
         Long multiplicationTime = 0L;
-        for (final Future<Long> future: taskFutures) {
-            try {
-                final long executionTime = future.get();
+        try {
+            for (Future<Long> future: taskFutures) {
+                final Long executionTime = future.get();
                 multiplicationTime += executionTime;
-            } catch (InterruptedException | ExecutionException ignore) {
             }
+        } catch (InterruptedException | ExecutionException ignore) {
         }
         executor.shutdown();
         return multiplicationTime;
     }
 
     Matrix<Double> returnMultiplicationResult(){
-        for (int rowIndex = 0; rowIndex < result.getRowNumber(); ++rowIndex) {
-            for (int colIndex = 0; colIndex < result.getColNumber(); ++colIndex) {
-                if (!result.isCellHaveValue(rowIndex,colIndex))
-                    return null;
-            }
-        }
         return result;
     }
 }

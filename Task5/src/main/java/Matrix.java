@@ -12,12 +12,6 @@ public class Matrix<T>{
     private int rowNumber = 0;
     //static final int DEFAULT_COL_NUMBER = 5;
 
-    public class IncorrectMatrixFileException extends Exception{
-        IncorrectMatrixFileException(String fileName){
-            super("In file \"" + fileName + "\": Rows in matrix should has the same length");
-        }
-    }
-
     Matrix(int colNumber,int rowNumber){
         this.rowNumber = rowNumber;
         this.colNumber = colNumber;
