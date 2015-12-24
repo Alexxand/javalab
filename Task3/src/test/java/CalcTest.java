@@ -18,9 +18,9 @@ import java.util.ArrayList;
 @RunWith(Parameterized.class)
 public class CalcTest<T> {
 
-    private String expression;
-    private Double value;
-    private String trueResult;
+    final private String expression;
+    final private Double value;
+    final private String trueResult;
     public CalcTest(String expression, Double value, String trueResult) {
         this.expression = expression;
         this.value = value;
@@ -28,8 +28,8 @@ public class CalcTest<T> {
     }
 
     private static <E> List<Object[]> getData(String ExpressionsFileName, String ValuesFileName, String ResultsFileName) {
-        List<String> ExpressionsList;
-        List<Double> ValuesList;
+        final List<String> ExpressionsList;
+        final List<Double> ValuesList;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(ExpressionsFileName)))) {
             ExpressionsList = new ArrayList<>();
             String line;
@@ -51,11 +51,11 @@ public class CalcTest<T> {
             throw new RuntimeException("File with test values can't be opened", e);
         }
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(ResultsFileName)))){
-        List<Object[]> result = new ArrayList<>();
+        final List<Object[]> result = new ArrayList<>();
         for (String expression: ExpressionsList){
             for(double value: ValuesList){
-                String trueResultString = reader.readLine();
-                Object[] resultElem = new Object[]{expression, value, trueResultString};
+                final String trueResultString = reader.readLine();
+                final Object[] resultElem = new Object[]{expression, value, trueResultString};
                 result.add(resultElem);
             }
         }
@@ -68,7 +68,7 @@ public class CalcTest<T> {
 
     @Parameterized.Parameters
     public static Collection<Object[]> testData() {
-        List<Object[]> testData = new ArrayList<>();
+        final List<Object[]> testData = new ArrayList<>();
         testData.addAll(getData("expressions.txt","values.txt","results.txt"));
         return testData;
     }
@@ -76,15 +76,18 @@ public class CalcTest<T> {
     @Test
     public void Test() {
         try {
-            ExpressionBuilder builder = new ExpressionBuilder(expression);
-            Expression expr = builder.build();
-            double result = expr.solve(value);
+            final ExpressionBuilder builder = new ExpressionBuilder(expression);
+            final Expression expr = builder.build();
+            final double result = expr.solve(value);
             Assert.assertEquals("Incorrect result", new Double(result), new Double(trueResult));
         }
         catch(UnexpectedSymbolException | ArithmeticException e){
             Assert.assertEquals("Incorrect result", e.getMessage(), trueResult);
         }
     }
+
+
+
 
 }
 

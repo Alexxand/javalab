@@ -23,8 +23,8 @@ interface Expression {
     }
 
     abstract class Binary implements Expression{
-        Expression a;
-        Expression b;
+        final Expression a;
+        final Expression b;
         public Binary(Expression a,Expression b){
             this.a = a;
             this.b = b;

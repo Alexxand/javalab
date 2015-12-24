@@ -15,7 +15,7 @@ public class ExpressionBuilder {
       S2: num | var | (S0) */
 
     public Expression build() throws UnexpectedSymbolException{
-        expressionString = removeAllSpaces(expressionString);
+        expressionString = expressionString.replace(" ","");
         return buildS0();
     }
 
@@ -110,37 +110,20 @@ public class ExpressionBuilder {
         }
     }
 
-    private static String removeAllSpaces(String s){
-        char sourceCharArr[] = s.toCharArray();
-        char newCharArr[] = new char[s.length()];
-        int indexNew = 0;
-        for (int indexSource = 0;indexSource < s.length(); indexSource++) {
-            if (sourceCharArr[indexSource] != ' ') {
-                newCharArr[indexNew] = sourceCharArr[indexSource];
-                indexNew++;
-            }
-        }
-        return new String(newCharArr,0,indexNew);
-    }
-
     private static int findEndOfNumber(String s,int offset)
     {
-        boolean point_flag = false;
+        boolean pointFlag = false;
         int i;
         for(i = offset;i < s.length();++i){
             if (s.charAt(i) == '.'){
-                if (point_flag)
+                if (pointFlag)
                     break;
-                point_flag = true;
+                pointFlag = true;
             }
-            else if (!isDigit(s,i))
+            else if (!Character.isDigit(s.codePointAt(i)))
                 break;
         }
         return i;
     }
 
-    private static boolean isDigit(String s, int index){
-        char ch = s.charAt(index);
-        return ch >= '0' && ch <= '9';
-    }
 }

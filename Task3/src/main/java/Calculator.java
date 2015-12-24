@@ -10,9 +10,9 @@ public class Calculator {
             String expression = args[0];
             double variableValue = new Double(args[1]);
             try {
-                ExpressionBuilder builder = new ExpressionBuilder(expression);
-                Expression expr = builder.build();
-                double result = expr.solve(variableValue);
+                final ExpressionBuilder builder = new ExpressionBuilder(expression);
+                final Expression expr = builder.build();
+                final double result = expr.solve(variableValue);
                 System.out.println(result);
             }
             catch (UnexpectedSymbolException | ArithmeticException e){

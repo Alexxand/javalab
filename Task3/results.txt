@@ -16,39 +16,15 @@
 0.0
 0.0
 0.0
-1.0
-1.0
-1.0
-1.0
+1
+1
+1
+1
 Divide by zero
-1.0
+1
 2530
 10450
 7761.6
 495900
 1350
 13230
-Unexpected symbol in 20 position
-Unexpected symbol in 20 position
-Unexpected symbol in 20 position
-Unexpected symbol in 20 position
-Unexpected symbol in 20 position
-Unexpected symbol in 20 position
-Unexpected symbol in 12 position
-Unexpected symbol in 12 position
-Unexpected symbol in 12 position
-Unexpected symbol in 12 position
-Unexpected symbol in 12 position
-Unexpected symbol in 12 position
-Unexpected symbol in 9 position
-Unexpected symbol in 9 position
-Unexpected symbol in 9 position
-Unexpected symbol in 9 position
-Unexpected symbol in 9 position
-Unexpected symbol in 9 position
-Unexpected symbol in 21 position
-Unexpected symbol in 21 position
-Unexpected symbol in 21 position
-Unexpected symbol in 21 position
-Unexpected symbol in 21 position
-Unexpected symbol in 21 position
